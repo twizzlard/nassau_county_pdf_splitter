@@ -27,15 +27,19 @@ if uploaded_file and uploaded_file.name == 'OYSTER_BAY_RS5.pdf':
         for idx, table in enumerate(pdf_tables, start=1):
             df = pd.DataFrame(table)  # Convert the table to a DataFrame
             combined_df = pd.concat([combined_df, df], ignore_index=True)
-            st.write(f"Table {idx}:")
-            st.write(df)
+            # st.write(f"Table {idx}:")
+            # st.write(df)
 
         st.write("\nCombined DataFrame:")
         st.write(combined_df)
 
-        # Download the combined DataFrame as an Excel file
-        excel_file = combined_df.to_excel(index=False)
-        st.download_button("Download Excel", data=excel_file, file_name="combined_data.xlsx", key="excel-download")
+        # Create a temporary Excel file and save the combined DataFrame to it
+        excel_file = NamedTemporaryFile(delete=False, suffix=".xlsx")
+        combined_df.to_excel(excel_file.name, index=False)
+
+        # Download the Excel file
+        st.download_button("Download Excel", data=open(excel_file.name, "rb").read(), file_name="combined_data.xlsx", key="excel-download")
+        
     else:
         st.write("\nNo tables found in the PDF.")
 else:
