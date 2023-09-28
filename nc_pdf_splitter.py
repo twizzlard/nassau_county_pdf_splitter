@@ -34,7 +34,7 @@ if uploaded_file and uploaded_file.name == 'OYSTER_BAY_RS5.pdf':
         st.write("\nTables extracted from the PDF:")
         for idx, table in enumerate(pdf_tables, start=1):
             df = pd.DataFrame(table)  # Convert the table to a DataFrame
-            df = df.astype(str)
+            
             combined_df = pd.concat([combined_df, df], ignore_index=True)  # Combine the DataFrames
         #     st.write(f"Table {idx}:")
         #     st.write(df)
