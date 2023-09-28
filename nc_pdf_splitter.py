@@ -28,11 +28,11 @@ if uploaded_file and uploaded_file.name == 'OYSTER_BAY_RS5.pdf':
         for idx, table in enumerate(pdf_tables, start=1):
             df = pd.DataFrame(table)  # Convert the table to a DataFrame
             combined_df = pd.concat([combined_df, df], ignore_index=True)  # Combine the DataFrames
-            st.write(f"Table {idx}:")
-            st.write(df)
+            # st.write(f"Table {idx}:")
+            # st.write(df)
 
-        st.write("\nCombined DataFrame:")
-        st.write(combined_df)
+        # st.write("\nCombined DataFrame:")
+        # st.write(combined_df)
 
         # Create a temporary Excel file and save the combined DataFrame to it
         excel_file = NamedTemporaryFile(delete=False, suffix=".xlsx")
