@@ -9,6 +9,13 @@ def extract_tables_from_pdf(pdf_path):
     tables = tabula.read_pdf(pdf_path, pages='all', multiple_tables=True)
     return tables
 
+# Function to create a downloadable link for a DataFrame
+def get_table_download_link(df, filename, text):
+    csv = df.to_excel(index=False, engine="openpyxl")
+    b64 = base64.b64encode(csv.encode()).decode()  # Encode as base64
+    href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{filename}">{text}</a>'
+    return href
+
 # Streamlit UI
 st.title("PDF Table Extractor")
 
@@ -34,17 +41,8 @@ if uploaded_file and uploaded_file.name == 'OYSTER_BAY_RS5.pdf':
         # st.write("\nCombined DataFrame:")
         # st.write(combined_df)
 
-        # Create a temporary Excel file and save the combined DataFrame to it
-        excel_file = NamedTemporaryFile(delete=False, suffix=".xlsx")
-        combined_df.to_excel(excel_file.name, index=False)
-
-        # Provide a download link for the Excel file
-        with open(excel_file.name, 'rb') as file:
-            excel_binary = file.read()
-        st.markdown(
-            f"**[Download Excel File](data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(excel_binary).decode()})**",
-            unsafe_allow_html=True
-        )
+        # Provide a download button for the Excel file
+        st.markdown(get_table_download_link(combined_df, "combined_data.xlsx", "Download Excel"), unsafe_allow_html=True)
     else:
         st.write("\nNo tables found in the PDF.")
 else:
