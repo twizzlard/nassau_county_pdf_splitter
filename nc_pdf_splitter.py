@@ -2,6 +2,7 @@ import streamlit as st
 import tabula
 import pandas as pd
 from tempfile import NamedTemporaryFile
+import base64
 
 # Function to extract tables from PDF using tabula and return as a list of DataFrames
 def extract_tables_from_pdf(pdf_path):
@@ -38,8 +39,10 @@ if uploaded_file and uploaded_file.name == 'OYSTER_BAY_RS5.pdf':
         combined_df.to_excel(excel_file.name, index=False)
 
         # Provide a download link for the Excel file
+        with open(excel_file.name, 'rb') as file:
+            excel_binary = file.read()
         st.markdown(
-            f"**[Download Excel File](data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{excel_file.name})**",
+            f"**[Download Excel File](data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(excel_binary).decode()})**",
             unsafe_allow_html=True
         )
     else:
