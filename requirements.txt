@@ -1,6 +1,5 @@
 streamlit==0.87.0
-tabula
 PyPDF2
-pandas
-
-
+streamlit==0.87.0
+tabula-py==2.3.0
+pandas==1.3.3
