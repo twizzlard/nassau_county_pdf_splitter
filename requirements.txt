@@ -1,5 +1,6 @@
 streamlit==0.87.0
-pdfplumber
+tabula
+PyPDF2
 pandas
 
 
