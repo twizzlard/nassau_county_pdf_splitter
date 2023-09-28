@@ -1,11 +1,11 @@
 import streamlit as st
-import tabula
+import camelot
 import pandas as pd
 from tempfile import NamedTemporaryFile
 
-# Function to extract tables from PDF using tabula and return as a list of DataFrames
+# Function to extract tables from PDF using camelot and return as a list of DataFrames
 def extract_tables_from_pdf(pdf_path):
-    tables = tabula.read_pdf(pdf_path, pages='all', multiple_tables=True)
+    tables = camelot.read_pdf(pdf_path, pages='all', flavor='stream')
     return tables
 
 # Streamlit UI
@@ -25,8 +25,8 @@ if uploaded_file and uploaded_file.name == 'OYSTER_BAY_RS5.pdf':
 
         st.write("\nTables extracted from the PDF:")
         for idx, table in enumerate(pdf_tables, start=1):
-            df = pd.DataFrame(table)  # Convert the table to a DataFrame
-            combined_df = combined_df.append(df, ignore_index=True)  # Append the current table to the combined DataFrame
+            df = table.df  # Convert the table to a DataFrame
+            combined_df = pd.concat([combined_df, df], ignore_index=True)  # Append the current table to the combined DataFrame
             st.write(f"Table {idx}:")
             st.write(df)
 
@@ -40,4 +40,3 @@ if uploaded_file and uploaded_file.name == 'OYSTER_BAY_RS5.pdf':
         st.write("\nNo tables found in the PDF.")
 else:
     st.write("Please upload the file named 'OYSTER_BAY_RS5.pdf'.")
-
