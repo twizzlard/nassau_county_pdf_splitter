@@ -12,7 +12,7 @@ def extract_tables_from_pdf(pdf_path):
 # Function to create a downloadable link for a binary file
 def get_binary_download_link(binary_data, filename, text):
     b64 = base64.b64encode(binary_data).decode()  # Encode as base64
-    href = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{filename}">{text}</a>'
+    href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">{text}</a>'
     return href
 
 # Streamlit UI
@@ -41,8 +41,8 @@ if uploaded_file and uploaded_file.name == 'OYSTER_BAY_RS5.pdf':
         # st.write(combined_df)
 
         # Create a binary Excel file and provide a download link
-        excel_data = combined_df.to_excel(index=False, engine='openpyxl')
-        st.markdown(get_binary_download_link(excel_data, "combined_data.xlsx", "Download Excel"), unsafe_allow_html=True)
+        excel_binary = combined_df.to_excel(index=False, engine='openpyxl')
+        st.markdown(get_binary_download_link(excel_binary, "combined_data.xlsx", "Download Excel"), unsafe_allow_html=True)
     else:
         st.write("\nNo tables found in the PDF.")
 else:
