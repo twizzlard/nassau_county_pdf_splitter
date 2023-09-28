@@ -3,6 +3,7 @@ import tabula
 import pandas as pd
 from tempfile import NamedTemporaryFile
 import base64
+import io
 
 # Function to extract tables from PDF using tabula and return as a list of DataFrames
 def extract_tables_from_pdf(pdf_path):
@@ -34,15 +35,17 @@ if uploaded_file and uploaded_file.name == 'OYSTER_BAY_RS5.pdf':
         for idx, table in enumerate(pdf_tables, start=1):
             df = pd.DataFrame(table)  # Convert the table to a DataFrame
             combined_df = pd.concat([combined_df, df], ignore_index=True)  # Combine the DataFrames
-            # st.write(f"Table {idx}:")
-            # st.write(df)
+        #     st.write(f"Table {idx}:")
+        #     st.write(df)
 
         # st.write("\nCombined DataFrame:")
         # st.write(combined_df)
 
         # Create a binary Excel file and provide a download link
-        excel_binary = combined_df.to_excel(index=False, engine='openpyxl')
-        st.markdown(get_binary_download_link(excel_binary, "combined_data.xlsx", "Download Excel"), unsafe_allow_html=True)
+        excel_buffer = io.BytesIO()
+        with pd.ExcelWriter(excel_buffer, engine='openpyxl') as writer:
+            combined_df.to_excel(writer, index=False)
+        st.markdown(get_binary_download_link(excel_buffer.getvalue(), "combined_data.xlsx", "Download Excel"), unsafe_allow_html=True)
     else:
         st.write("\nNo tables found in the PDF.")
 else:
