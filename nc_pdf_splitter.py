@@ -4,6 +4,7 @@ import pandas as pd
 from tempfile import NamedTemporaryFile
 import base64
 import io
+import os
 
 # Function to extract tables from PDF using tabula and return as a list of DataFrames
 def extract_tables_from_pdf(pdf_path):
