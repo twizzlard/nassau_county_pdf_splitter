@@ -21,7 +21,7 @@ st.title("PDF Table Extractor")
 
 # File Upload
 uploaded_file = st.file_uploader("Upload a PDF file", type=["pdf"])
-if uploaded_file and uploaded_file.name == 'OYSTER_BAY_RS5.pdf':
+if uploaded_file:
     with NamedTemporaryFile(delete=False, suffix=".pdf") as temp_pdf:
         temp_pdf.write(uploaded_file.read())
 
