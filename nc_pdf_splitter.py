@@ -1,11 +1,17 @@
 import streamlit as st
-import camelot
+import pdfplumber
 import pandas as pd
 from tempfile import NamedTemporaryFile
 
-# Function to extract tables from PDF using camelot and return as a list of DataFrames
+# Function to extract tables from PDF using pdfplumber and return as a list of DataFrames
 def extract_tables_from_pdf(pdf_path):
-    tables = camelot.read_pdf(pdf_path, pages='all', flavor='stream')
+    tables = []
+    with pdfplumber.open(pdf_path) as pdf:
+        for page in pdf.pages:
+            table = page.extract_table()
+            if table:
+                df = pd.DataFrame(table[1:], columns=table[0])
+                tables.append(df)
     return tables
 
 # Streamlit UI
@@ -21,12 +27,10 @@ if uploaded_file and uploaded_file.name == 'OYSTER_BAY_RS5.pdf':
     pdf_tables = extract_tables_from_pdf(temp_pdf.name)
 
     if pdf_tables:
-        combined_df = pd.DataFrame()  # Initialize an empty DataFrame to store all tables
+        combined_df = pd.concat(pdf_tables, ignore_index=True)  # Combine all DataFrames into one
 
         st.write("\nTables extracted from the PDF:")
-        for idx, table in enumerate(pdf_tables, start=1):
-            df = table.df  # Convert the table to a DataFrame
-            combined_df = pd.concat([combined_df, df], ignore_index=True)  # Append the current table to the combined DataFrame
+        for idx, df in enumerate(pdf_tables, start=1):
             st.write(f"Table {idx}:")
             st.write(df)
 
