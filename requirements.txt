@@ -1,5 +1,5 @@
 streamlit==0.87.0
-camelot-py==0.10.1
+pdfplumber
 pandas
-PyPDF2
-cv2
+
+
