@@ -31,7 +31,7 @@ if uploaded_file:
     if pdf_tables:
         combined_df = pd.DataFrame()  # Initialize an empty DataFrame to store all tables
 
-        st.write("\nTables extracted from the PDF:")
+        st.write("\nTables extracted from the PDF.")
         for idx, table in enumerate(pdf_tables, start=1):
             df = pd.DataFrame(table)  # Convert the table to a DataFrame
             
@@ -46,8 +46,13 @@ if uploaded_file:
         excel_buffer = io.BytesIO()
         with pd.ExcelWriter(excel_buffer, engine='openpyxl') as writer:
             combined_df.to_excel(writer, index=False)
-        st.markdown(get_binary_download_link(excel_buffer.getvalue(), "combined_data.xlsx", "Download Excel"), unsafe_allow_html=True)
+        
+        # Generate the output Excel filename based on the original PDF filename
+        pdf_filename = os.path.splitext(uploaded_file.name)[0]
+        excel_filename = f"{pdf_filename}.xlsx"
+
+        st.markdown(get_binary_download_link(excel_buffer.getvalue(), excel_filename, "Download Excel"), unsafe_allow_html=True)
     else:
         st.write("\nNo tables found in the PDF.")
 else:
-    st.write("Please upload the file named 'OYSTER_BAY_RS5.pdf'.")
+    st.write("Please upload a file.")
