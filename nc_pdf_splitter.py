@@ -30,8 +30,8 @@ if uploaded_file and uploaded_file.name == 'OYSTER_BAY_RS5.pdf':
             # st.write(f"Table {idx}:")
             # st.write(df)
 
-        st.write("\nCombined DataFrame:")
-        st.write(combined_df)
+        # st.write("\nCombined DataFrame:")
+        # st.write(combined_df)
 
         # Create a temporary Excel file and save the combined DataFrame to it
         excel_file = NamedTemporaryFile(delete=False, suffix=".xlsx")
