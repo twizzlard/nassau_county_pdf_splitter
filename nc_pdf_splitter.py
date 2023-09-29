@@ -23,7 +23,7 @@ st.title("PDF Table Extractor")
 uploaded_file = st.file_uploader("Upload a PDF file", type=["pdf"])
 if uploaded_file and uploaded_file.name == 'OYSTER_BAY_RS5.pdf':
     # Create a temporary directory to store PDF chunks
-    temp_dir = st.beta_container()
+    temp_dir = st.container()
     temp_dir.write("Processing... Please wait.")
 
     with NamedTemporaryFile(delete=False, suffix=".pdf") as temp_pdf:
