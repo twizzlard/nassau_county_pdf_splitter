@@ -3,7 +3,7 @@ import tabula
 import pandas as pd
 import os
 import PyPDF2
-from tempfile import NamedTemporaryFile
+import tempfile
 import io
 
 # Function to extract tables from PDF using tabula and return as a list of DataFrames
@@ -36,11 +36,10 @@ st.title("PDF Table Extractor")
 # File Upload
 uploaded_file = st.file_uploader("Upload a PDF file", type=["pdf"])
 if uploaded_file:
-    # Create a temporary directory to store PDF pages
-    temp_dir = NamedTemporaryFile(delete=False, suffix='', dir='').name
-    os.makedirs(temp_dir, exist_ok=True)
+    # Create a unique temporary directory to store PDF pages
+    temp_dir = tempfile.mkdtemp()
 
-    with NamedTemporaryFile(delete=False, suffix=".pdf") as temp_pdf:
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_pdf:
         temp_pdf.write(uploaded_file.read())
 
         # Extract the number of pages in the PDF
@@ -67,7 +66,7 @@ if uploaded_file:
                 st.write(f"Page {page_num + 1}, Table {idx}")
                 # st.write(df)
 
-        st.write("Combined DataFrame:")
+        # st.write("Combined DataFrame:")
         # st.write(combined_df)
 
         # Create a binary Excel file and provide a download link
